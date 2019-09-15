@@ -66,9 +66,9 @@ export default {
           title: this.incomeTitle,
           amount: this.incomeAmount
         });
-      this.id++;
-      this.incomeTitle = ""
-      this.incomeAmount = undefined
+        this.id++;
+        this.incomeTitle = ""
+        this.incomeAmount = undefined
       } else {
         if (this.incomeAmount <= 0) this.error.incomeAmount = true;
         if (this.incomeTitle === "") this.error.incomeTitle = true;
