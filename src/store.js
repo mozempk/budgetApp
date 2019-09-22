@@ -29,7 +29,7 @@ export default new Vuex.Store({
       to_edit.amount = payload.amount; // Modify its amount
     },
     EDIT_EXPENSE: (state, payload) => {
-      to_edit = state.expenses.find((element, payload) => {
+      to_edit = state.expenses.find((element) => {
         return element.id === payload.id
       }); // Retrieve previous element
       to_edit.title = payload.title;
