@@ -19,12 +19,14 @@
       placeholder="Enter amount"
       color="#05668d"
       hide-details
-      :prefix="currPrefix"
+      :suffix="suffix"
       type="number"
       v-model="amount"
+      prepend-inner-icon="mdi-cash-multiple"
+      @click:prepend-inner="changeCurrency"
     ></v-text-field>
 
-    <v-btn class="mt-5" outlined :color="color" block @click="submit">Submit</v-btn>
+    <v-btn class="mt-5" outlined :color="color" block @click="submit">{{editing ? "Edit" : "Submit"}}</v-btn>
   </div>  
 </template>
 
@@ -42,25 +44,28 @@ export default {
             error: {
                 amount: false,
                 title: false
-            }
+            },
+            editing:false
         }
     },
     computed: {
         ...mapGetters([
             'currencies',
-            'selectedCurrency'
+            'selectedCurrency',
+            'toEdit'
         ]),
-        currPrefix() {
-            switch (this.selectedCurrency) {
-                case "EUR":
-                    return "€";
-                case "CHF":
-                    return "CHF";
-                case "USD":
-                    return "$";
-                default:
-                    return "€";
-            }
+        suffix() {
+            return this.currencies[this.selectedCurrency]
+            // switch (this.selectedCurrency) {
+            //     case "EUR":
+            //         return "€";
+            //     case "CHF":
+            //         return "CHF";
+            //     case "USD":
+            //         return "$";
+            //     default:
+            //         return "€";
+            // }
         },
         placeholder() {
             if (this.inbound) return "Enter income"
@@ -75,22 +80,54 @@ export default {
     },
     methods: {
         submit() {
-            if (this.title !== "" && this.amount > 0) {
-                let payload = {
-                    id: this.id,
-                    title: this.title,
-                    amount: this.amount
+            if (!this.editing){
+                if (this.title !== "" && this.amount > 0) {
+                    let payload = {
+                        id: this.id,
+                        title: this.title,
+                        amount: this.amount,
+                        currency: this.currencies[this.selectedCurrency]
+                    }
+                    this.inbound ? this.$store.dispatch("addIncome", payload) : this.$store.dispatch("addExpense", payload);
+                    this.id++;
+                    this.title = ""
+                    this.amount = undefined
+                } else {
+                    if (this.amount <= 0) this.error.amount = true;
+                    if (this.title === "") this.error.title = true;
                 }
-                this.inbound ? this.$store.dispatch("addIncome", payload) : this.$store.dispatch("addExpense", payload);
-                this.id++;
-                this.title = ""
-                this.amount = undefined
             } else {
-                if (this.amount <= 0) this.error.amount = true;
-                if (this.title === "") this.error.title = true;
+                let payload = {
+                    id: this.toEdit.item.id,
+                    title: this.title,
+                    amount: this.amount,
+                    currency: this.currencies[this.selectedCurrency]
+                }
+                this.inbound ? this.$store.dispatch('editIncome',payload) : this.$store.dispatch('editExpense',payload)
+                this.$store.dispatch('setToEdit',undefined)
+            }
+        },
+        changeCurrency() {
+            if (this.selectedCurrency + 1 <= this.currencies.length -1) this.$store.dispatch('changeCurrency',this.selectedCurrency +1)
+            else this.$store.dispatch('changeCurrency',0)
+        },
+    },
+    watch: {
+        toEdit() {
+            if (this.toEdit !== undefined){
+                if (this.toEdit.inbound == this.inbound) {
+                    this.editing = true
+                    this.title = this.toEdit.item.title,
+                    this.amount = this.toEdit.item.amount,
+                    this.$store.dispatch('changeCurrency', this.currencies.indexOf(this.toEdit.item.currency))
+                }
+            } else {
+                this.editing=false;
+                this.title = ""
+                this.amount = undefined                
             }
         }
-  },
+    }
 }
 </script>
 

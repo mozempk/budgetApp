@@ -5,11 +5,14 @@
             <v-col cols="1">
                 <slot name="sign"></slot>
             </v-col>
-            <v-col cols="5">
+            <v-col cols="4">
                 <slot name="title"></slot>
             </v-col>
-            <v-col cols="50">
+            <v-col cols="3">
                 <slot name="amount"></slot>
+            </v-col>
+            <v-col cols="2">
+                <slot name="currency"></slot>
             </v-col>
             <v-col cols="1">
                 <slot name="edit" :modify="modify"></slot>
@@ -32,11 +35,11 @@
         },
         methods: {
             modify() {
-                if (this.inbound) {
-                    this.$store.dispatch('editIncome',this.item)
-                } else {
-                    this.$store.dispatch('editExpense',this.item)
+                let payload = {
+                    inbound: this.inbound,
+                    item: this.item
                 }
+                this.$store.dispatch('setToEdit',payload)
             },
             erase() {
                 if (this.inbound) {

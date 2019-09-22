@@ -9,8 +9,11 @@ export default new Vuex.Store({
     incomes: [],
     expenses: [],
     balance: 0,
-    selectedCurrency: 'CHF',
+    selectedCurrency: 0,
     currencies: ['CHF', 'EUR', 'USD'],
+    masterCurrency: 0,
+    toEdit: undefined
+
   },
 
   mutations: {
@@ -27,6 +30,7 @@ export default new Vuex.Store({
       }); // Retrieve previous element
       to_edit.title = payload.title; // Modify its title
       to_edit.amount = payload.amount; // Modify its amount
+      to_edit.currency = payload.currency; // Modify its amount
     },
     EDIT_EXPENSE: (state, payload) => {
       let to_edit = state.expenses.find((element) => {
@@ -34,6 +38,7 @@ export default new Vuex.Store({
       }); // Retrieve previous element
       to_edit.title = payload.title;
       to_edit.amount = payload.amount;
+      to_edit.currency = payload.currency;
     },
     CHANGE_CURRENCY: (state, payload) => state.selectedCurrency = payload,
     DELETE_INCOME: (state, payload) => state.incomes = state.incomes.filter((element) => {
@@ -42,6 +47,8 @@ export default new Vuex.Store({
     DELETE_EXPENSE: (state, payload) => state.expenses = state.expenses.filter((element) => {
       return element.id !== payload.id
     }),
+    SET_MASTER_CURRENCY: (state,payload) => state.masterCurrency = payload,
+    SET_TO_EDIT: (state,payload) => state.toEdit = payload
   },
 
   actions: {
@@ -72,7 +79,13 @@ export default new Vuex.Store({
     changeCurrency({commit},payload){
       commit('CHANGE_CURRENCY',payload);
     },
-
+    setMasterCurrency({commit},payload){
+      commit('SET_MASTER_CURRENCY',payload)
+      commit('CHANGE_CURRENCY',payload)
+    },
+    setToEdit({commit},payload){
+      commit('SET_TO_EDIT',payload)
+    }
   },
 
   getters: {
@@ -80,6 +93,9 @@ export default new Vuex.Store({
     expenses: state => state.expenses,
     balance: state => state.balance.toString(),
     selectedCurrency: state => state.selectedCurrency,
+    currencies: state => state.currencies,
+    masterCurrency: state => state.masterCurrency,
+    toEdit: state=>state.toEdit
   }
 
 })
