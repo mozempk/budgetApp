@@ -22,26 +22,29 @@ export default new Vuex.Store({
     ADD_INCOME: (state, payload) => state.incomes.push(payload),
     ADD_EXPENSE: (state, payload) => state.expenses.push(payload),
     EDIT_INCOME: (state, payload) => {
-      to_edit = state.incomes.find((element, payload) => {
+      let to_edit = state.incomes.find((element) => {
         return element.id === payload.id
       }); // Retrieve previous element
       to_edit.title = payload.title; // Modify its title
       to_edit.amount = payload.amount; // Modify its amount
     },
     EDIT_EXPENSE: (state, payload) => {
-      to_edit = state.expenses.find((element) => {
+      let to_edit = state.expenses.find((element) => {
         return element.id === payload.id
       }); // Retrieve previous element
       to_edit.title = payload.title;
       to_edit.amount = payload.amount;
     },
     CHANGE_CURRENCY: (state, payload) => state.selectedCurrency = payload,
+    DELETE_INCOME: (state, payload) => state.incomes = state.incomes.filter((element) => {
+      return element.id !== payload.id
+    }),
+    DELETE_EXPENSE: (state, payload) => state.expenses = state.expenses.filter((element) => {
+      return element.id !== payload.id
+    }),
   },
 
   actions: {
-    /*updateBalance: ({commit}) => {
-      commit('COMPUTE_BALANCE')
-    },*/
     addIncome({commit},payload){
       commit('ADD_INCOME',payload);
       commit('COMPUTE_BALANCE');
@@ -58,7 +61,15 @@ export default new Vuex.Store({
       commit('EDIT_EXPENSE',payload);
       commit('COMPUTE_BALANCE');
     },
-    changeCurrency({commit}, payload){
+    deleteIncome({commit},payload){
+      commit('DELETE_INCOME',payload);
+      commit('COMPUTE_BALANCE');
+    },
+    deleteExpense({commit},payload){
+      commit('DELETE_EXPENSE',payload);
+      commit('COMPUTE_BALANCE');
+    },
+    changeCurrency({commit},payload){
       commit('CHANGE_CURRENCY',payload);
     },
 
@@ -68,6 +79,7 @@ export default new Vuex.Store({
     incomes: state => state.incomes,
     expenses: state => state.expenses,
     balance: state => state.balance.toString(),
+    selectedCurrency: state => state.selectedCurrency,
   }
 
 })

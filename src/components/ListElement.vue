@@ -12,10 +12,10 @@
                 <slot name="amount"></slot>
             </v-col>
             <v-col cols="1">
-                <slot name="edit"></slot>
+                <slot name="edit" :modify="modify"></slot>
             </v-col>
             <v-col cols="1">
-                <slot name="delete"></slot>
+                <slot name="delete" :erase="erase"></slot>
             </v-col>
         </v-row>       
     </div>
@@ -24,10 +24,27 @@
 <script>
     export default {
         props: {
-            inbound: Boolean
+            inbound: Boolean,
+            item: Object
         },
         data() {
             return {}
+        },
+        methods: {
+            modify() {
+                if (this.inbound) {
+                    this.$store.dispatch('editIncome',this.item)
+                } else {
+                    this.$store.dispatch('editExpense',this.item)
+                }
+            },
+            erase() {
+                if (this.inbound) {
+                    this.$store.dispatch('deleteIncome',this.item)
+                } else {
+                    this.$store.dispatch('deleteExpense',this.item)
+                }
+            },
         }
     }
 </script>

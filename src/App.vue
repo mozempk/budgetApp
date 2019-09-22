@@ -16,7 +16,7 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-                <ListElement inbound v-for="income in incomes" v-bind:key="income.id">
+                <ListElement inbound v-for="income in incomes" v-bind:key="income.id" :item="income">
                   <template v-slot:sign>
                     <v-icon class="green-text">mdi-plus</v-icon>
                   </template>
@@ -26,11 +26,11 @@
                   <template v-slot:amount>
                     {{income.amount}}
                   </template>
-                  <template v-slot:edit>
-                    <v-icon class="blue--text">mdi-pencil-outline</v-icon>
+                  <template v-slot:edit="{item,modify}">
+                    <v-icon class="blue--text" @click="modify">mdi-pencil-outline</v-icon>
                   </template>
-                  <template v-slot:delete>
-                    <v-icon class="red--text text--darken-2">mdi-delete</v-icon>
+                  <template v-slot:delete="{item,erase}">
+                    <v-icon class="red--text text--darken-2" @click="erase">mdi-delete</v-icon>
                   </template>
                 </ListElement>
           </v-col>
