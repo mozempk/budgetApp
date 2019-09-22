@@ -8,10 +8,10 @@
       <v-container class="pa-10">
         <v-row>
           <v-col cols="12" md="6">
-            <IncomeForm/>
+            <Form inbound/>
           </v-col>
           <v-col cols="12" md="6">
-            <ExpenseForm/>
+            <Form v-bind:inbound="false"/>
           </v-col>
         </v-row>
         <v-row>
@@ -60,17 +60,13 @@
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld';
-import IncomeForm from './components/IncomeForm';
-import ExpenseForm from './components/ExpenseForm';
+import Form from './components/Form';
 import ListElement from './components/ListElement';
 import {mapGetters} from 'vuex'
 export default {
   name: 'App',
   components: {
-    //HelloWorld,
-    IncomeForm,
-    ExpenseForm,
+    Form,
     ListElement
   },
   data: () => ({
