@@ -72,7 +72,7 @@
                 </ListElement>
           </v-col>
           <v-col cols="12" md="6">
-                <ListElement v-bind:inbound="false" v-for="expense in expenses" v-bind:key="expense.id">
+                <ListElement v-bind:inbound="false" v-for="expense in expenses" v-bind:key="expense.id" :item="expense">
                   <template v-slot:sign>
                     <v-icon class="red-text">mdi-minus</v-icon>
                   </template>
@@ -85,11 +85,11 @@
                   <template v-slot:currency>
                     {{expense.currency}}
                   </template>
-                  <template v-slot:edit>
-                    <v-icon class="blue--text">mdi-pencil-outline</v-icon>
+                  <template v-slot:edit="{modify}">
+                    <v-icon class="blue--text" @click="modify" >mdi-pencil-outline</v-icon>
                   </template>
-                  <template v-slot:delete>
-                    <v-icon class="red--text text--darken-2">mdi-delete</v-icon>
+                  <template v-slot:delete="{erase}">
+                    <v-icon class="red--text text--darken-2" @click="erase">mdi-delete</v-icon>
                   </template>
                 </ListElement>
           </v-col>
