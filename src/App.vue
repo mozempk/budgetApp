@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app clipped-left>
-      <v-app-bar-nav-icon @click="menu=!menu"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="menu=!menu"></v-app-bar-nav-icon>
       <v-toolbar-title class=text-uppercase>Budget App</v-toolbar-title>
     </v-app-bar>
 
@@ -22,7 +22,7 @@
       <v-list>
         <v-list-item>
           <v-col>
-            Select master currency
+            <!-- Select master currency -->
             <v-select 
             :items="currencies"
             return-object

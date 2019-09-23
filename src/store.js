@@ -11,7 +11,7 @@ export default new Vuex.Store({
     expenses: [],
     balance: 0,
     currencies: ['CHF', 'EUR', 'USD'],
-    selectedCurrency: 0,
+//    selectedCurrency: 0,
     masterCurrency: 0,
     toEdit: undefined,
     exchangeRates: undefined,
@@ -32,7 +32,7 @@ export default new Vuex.Store({
       }); // Retrieve original element
       to_edit.title = payload.title; // Modify its title
       to_edit.amount = payload.amount; // Modify its amount
-      to_edit.currency = payload.currency; // Modify its amount
+      to_edit.currency = payload.currency; // Modify its currency
     },
     EDIT_EXPENSE: (state, payload) => {
       let to_edit = state.expenses.find((element) => {
@@ -42,7 +42,7 @@ export default new Vuex.Store({
       to_edit.amount = payload.amount;
       to_edit.currency = payload.currency;
     },
-    CHANGE_CURRENCY: (state, payload) => state.selectedCurrency = payload,
+//    CHANGE_CURRENCY: (state, payload) => state.selectedCurrency = payload,
     DELETE_INCOME: (state, payload) => state.incomes = state.incomes.filter((element) => {
       return element.id !== payload.id
     }),
@@ -80,12 +80,12 @@ export default new Vuex.Store({
       commit('DELETE_EXPENSE',payload);
       commit('COMPUTE_BALANCE');
     },
-    changeCurrency({commit},payload){
-      commit('CHANGE_CURRENCY',payload);
-    },
+//    changeCurrency({commit},payload){
+//      commit('CHANGE_CURRENCY',payload);
+//    },
     setMasterCurrency({commit},payload){
       commit('SET_MASTER_CURRENCY',payload)
-      commit('CHANGE_CURRENCY',payload)
+//      commit('CHANGE_CURRENCY',payload)
     },
     setToEdit({commit},payload){
       commit('SET_TO_EDIT',payload)
@@ -110,7 +110,7 @@ export default new Vuex.Store({
     incomes: state => state.incomes,
     expenses: state => state.expenses,
     balance: state => state.balance.toString(),
-    selectedCurrency: state => state.selectedCurrency,
+//    selectedCurrency: state => state.selectedCurrency,
     currencies: state => state.currencies,
     masterCurrency: state => state.masterCurrency,
     toEdit: state=>state.toEdit
