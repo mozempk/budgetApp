@@ -1,5 +1,6 @@
 export default class CurrencyConversion {
-    constructor(rates = undefined, base=undefined) {
+
+    constructor(rates=undefined, base=undefined) {
         this.rates = rates
         this.base = base
         this.errors = {

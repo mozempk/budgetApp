@@ -45,27 +45,19 @@ export default {
                 amount: false,
                 title: false
             },
-            editing:false
+            editing: false,
+            currency: undefined,
+            currencyIndex: 0
         }
     },
     computed: {
         ...mapGetters([
             'currencies',
-            'selectedCurrency',
-            'toEdit'
+            'toEdit',
+            'masterCurrency'
         ]),
         suffix() {
-            return this.currencies[this.selectedCurrency]
-            // switch (this.selectedCurrency) {
-            //     case "EUR":
-            //         return "€";
-            //     case "CHF":
-            //         return "CHF";
-            //     case "USD":
-            //         return "$";
-            //     default:
-            //         return "€";
-            // }
+            return this.currencies[this.currencyIndex]
         },
         placeholder() {
             if (this.inbound) return "Enter income"
@@ -74,7 +66,6 @@ export default {
         color() {
             if (this.inbound) return "#317b22"
             else return "#b80c09"
-
         }
 
     },
@@ -86,7 +77,7 @@ export default {
                         id: this.id,
                         title: this.title,
                         amount: this.amount,
-                        currency: this.currencies[this.selectedCurrency]
+                        currency: this.currency
                     }
                     this.inbound ? this.$store.dispatch("addIncome", payload) : this.$store.dispatch("addExpense", payload);
                     this.id++;
@@ -101,15 +92,15 @@ export default {
                     id: this.toEdit.item.id,
                     title: this.title,
                     amount: this.amount,
-                    currency: this.currencies[this.selectedCurrency]
+                    currency: this.currency
                 }
                 this.inbound ? this.$store.dispatch('editIncome',payload) : this.$store.dispatch('editExpense',payload)
                 this.$store.dispatch('setToEdit',undefined)
             }
         },
         changeCurrency() {
-            if (this.selectedCurrency + 1 <= this.currencies.length -1) this.$store.dispatch('changeCurrency',this.selectedCurrency +1)
-            else this.$store.dispatch('changeCurrency',0)
+            this.currencyIndex = (this.currencyIndex+1)%(this.currencies.length)
+            this.currency = this.currencies[this.currencyIndex]
         },
     },
     watch: {
@@ -117,16 +108,25 @@ export default {
             if (this.toEdit !== undefined){
                 if (this.toEdit.inbound == this.inbound) {
                     this.editing = true
-                    this.title = this.toEdit.item.title,
-                    this.amount = this.toEdit.item.amount,
-                    this.$store.dispatch('changeCurrency', this.currencies.indexOf(this.toEdit.item.currency))
+                    this.title = this.toEdit.item.title
+                    this.amount = this.toEdit.item.amount
+                    this.currency = this.toEdit.item.currency
+//                    this.$store.dispatch('changeCurrency', this.currencies.indexOf(this.toEdit.item.currency))
                 }
             } else {
                 this.editing=false;
-                this.title = ""
-                this.amount = undefined                
+                this.title = "";
+                this.amount = undefined
             }
+        },
+        masterCurrency() {
+            this.currency = this.currencies[this.masterCurrency]
+            this.currencyIndex = this.masterCurrency
         }
+    },
+    created() {
+        this.currencyIndex = this.masterCurrency
+        this.currency = this.currencies[this.currencyIndex]
     }
 }
 </script>
