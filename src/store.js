@@ -11,7 +11,6 @@ export default new Vuex.Store({
     expenses: [],
     balance: 0,
     currencies: ['CHF', 'EUR', 'USD'],
-//    selectedCurrency: 0,
     masterCurrency: 0,
     toEdit: undefined,
     exchangeRates: undefined,
