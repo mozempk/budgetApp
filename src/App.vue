@@ -63,10 +63,10 @@
                   <template v-slot:currency>
                     {{income.currency}}
                   </template>
-                  <template v-slot:edit="{item,modify}">
+                  <template v-slot:edit="{modify}">
                     <v-icon class="blue--text" @click="modify">mdi-pencil-outline</v-icon>
                   </template>
-                  <template v-slot:delete="{item,erase}">
+                  <template v-slot:delete="{erase}">
                     <v-icon class="red--text text--darken-2" @click="erase">mdi-delete</v-icon>
                   </template>
                 </ListElement>
@@ -93,6 +93,10 @@
                   </template>
                 </ListElement>
           </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="6"></v-col>
+          <v-col cols="12" md="6"></v-col>
         </v-row>
       </v-container>
     </v-content>
@@ -129,6 +133,7 @@ export default {
   },
   created() {
     this.selectedMasterCurency = this.currencies[this.masterCurrency]
+    this.$store.dispatch('setExchangeRates')
   }
 };
 
